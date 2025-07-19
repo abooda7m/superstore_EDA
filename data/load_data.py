@@ -1,4 +1,5 @@
-#pull the data, convert date columns, handle missing values, and derive new columns
+# load_data.py
+
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -7,26 +8,40 @@ import os
 
 @st.cache_data(ttl=900)
 def load_data():
-    #load data from CSV file 
-    file_path = os.path.join(os.path.dirname(__file__), 'superstore_raw.csv')
+    # Load data from CSV file 
+    file_path = os.path.join(os.path.dirname(__file__), 'superstore_sales.csv')
     df_raw = pd.read_csv(file_path)
-    #replace "None", "nan", None to NaN
+
+    # Replace "None", "nan", None with np.nan
     df_raw.replace(["None", "nan", None], np.nan, inplace=True)
-    #convert to dateTime 
-    df_raw["Order Date"] = pd.to_datetime(df_raw["Order Date"], errors='coerce')
-    df_raw["Ship Date"] = pd.to_datetime(df_raw["Ship Date"], errors='coerce')
+
+    # Convert columns to proper formats
+    df_raw["Order Date"] = pd.to_datetime(df_raw["Order Date"], errors='coerce', dayfirst=True)
+    df_raw["Ship Date"] = pd.to_datetime(df_raw["Ship Date"], errors='coerce', dayfirst=True)
+
     df_raw["Sales"] = pd.to_numeric(df_raw["Sales"], errors="coerce")
-    # clean data
+
+    # Copy raw data for cleaning
     df_clean = df_raw.copy()
-    
     logs = []
-    critical = ["Sales", "Order Date"]
+
+    # 🔴 Drop rows with missing Sales ONLY
+    critical = ["Sales"]
     dropped = df_clean[df_clean[critical].isna().any(axis=1)]
     if not dropped.empty:
-        dropped["__Action__"] = "Dropped due to missing critical fields"
+        dropped["__Action__"] = "Dropped due to missing Sales"
         logs.append(dropped)
     df_clean.dropna(subset=critical, inplace=True)
 
+    # 🩹 Impute missing Order Date using Ship Date - 2 days
+    mask_missing_order = df_clean["Order Date"].isna() & df_clean["Ship Date"].notna()
+    df_clean.loc[mask_missing_order, "Order Date"] = df_clean["Ship Date"] - pd.Timedelta(days=2)
+    if mask_missing_order.sum() > 0:
+        affected = df_clean[mask_missing_order].copy()
+        affected["__Action__"] = "Order Date Imputed: Ship Date - 2 days"
+        logs.append(affected)
+
+    # Impute other missing values (non-critical)
     for col in df_clean.columns:
         if df_clean[col].isna().sum() == 0:
             continue
@@ -41,7 +56,9 @@ def load_data():
             affected["__Action__"] = f"Imputed Mode: '{value}'"
         logs.append(affected)
 
+    # Derive new columns
     df_clean["Shipping Duration"] = (df_clean["Ship Date"] - df_clean["Order Date"]).dt.days
     df_clean["Profit"] = df_clean["Sales"] * 0.3
+
     final_log = pd.concat(logs) if logs else pd.DataFrame()
     return df_clean, final_log

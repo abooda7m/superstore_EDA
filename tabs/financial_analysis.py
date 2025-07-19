@@ -23,7 +23,7 @@ def render(df_filtered):
     st.markdown("---")
     st.subheader("Profit by Sub Category")
 
-    profit_by_sub = df_filtered.groupby("Sub Category")["Profit"].sum().sort_values()
+    profit_by_sub = df_filtered.groupby("Sub-Category")["Profit"].sum().sort_values()
     st.bar_chart(profit_by_sub)
 
     st.markdown("---")
@@ -35,7 +35,7 @@ def render(df_filtered):
 
     st.markdown("---")
     st.subheader("Top 10 Sub-Categories by Sales")
-    top_sub = df_filtered.groupby("Sub Category")["Sales"].sum().sort_values(ascending=False).head(10)
+    top_sub = df_filtered.groupby("Sub-Category")["Sales"].sum().sort_values(ascending=False).head(10)
     st.bar_chart(top_sub)
 
     st.subheader("Monthly Sales Trend")

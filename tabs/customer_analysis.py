@@ -33,10 +33,3 @@ def render(df_filtered , cleaning_log):
     )
     st.table(top_5_customers.style.format({"Sales": "${:,.2f}"}))
     
-    if cleaning_log.empty:
-        st.success("No rows were modified or dropped.")
-    else:
-        st.dataframe(cleaning_log.drop(columns=["Profit", "Shipping Duration"], errors="ignore"), use_container_width=True)
-        st.caption("Each row that was deleted or had missing values modified is logged here for transparency and review.")
-
-
