@@ -18,14 +18,13 @@ def load_data():
     # Convert columns to proper formats
     df_raw["Order Date"] = pd.to_datetime(df_raw["Order Date"], errors='coerce', dayfirst=True)
     df_raw["Ship Date"] = pd.to_datetime(df_raw["Ship Date"], errors='coerce', dayfirst=True)
-
     df_raw["Sales"] = pd.to_numeric(df_raw["Sales"], errors="coerce")
 
     # Copy raw data for cleaning
     df_clean = df_raw.copy()
     logs = []
 
-    #  Drop rows with missing Sales ONLY
+    # Drop rows with missing Sales ONLY
     critical = ["Sales"]
     dropped = df_clean[df_clean[critical].isna().any(axis=1)]
     if not dropped.empty:
@@ -33,7 +32,11 @@ def load_data():
         logs.append(dropped)
     df_clean.dropna(subset=critical, inplace=True)
 
-    # 🩹 Impute missing Order Date using Ship Date - 2 days
+    # ❌ Drop Postal Code column
+    if "Postal Code" in df_clean.columns:
+        df_clean.drop(columns=["Postal Code"], inplace=True)
+
+    # Impute missing Order Date using Ship Date - 2 days
     mask_missing_order = df_clean["Order Date"].isna() & df_clean["Ship Date"].notna()
     df_clean.loc[mask_missing_order, "Order Date"] = df_clean["Ship Date"] - pd.Timedelta(days=2)
     if mask_missing_order.sum() > 0:
