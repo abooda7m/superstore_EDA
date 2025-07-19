@@ -1,0 +1,10 @@
+streamlit>=1.25
+pandas
+numpy
+matplotlib
+seaborn
+scikit-learn
+scipy
+python-dotenv
+supabase
+plotly
