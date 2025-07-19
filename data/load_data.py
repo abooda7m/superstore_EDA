@@ -25,7 +25,7 @@ def load_data():
     df_clean = df_raw.copy()
     logs = []
 
-    # 🔴 Drop rows with missing Sales ONLY
+    #  Drop rows with missing Sales ONLY
     critical = ["Sales"]
     dropped = df_clean[df_clean[critical].isna().any(axis=1)]
     if not dropped.empty:
