@@ -8,7 +8,6 @@ from tabs import (
     financial_analysis,
     customer_analysis,
     recommendations,
-    balance_sheet
 )
 from tabs.prediction import sales_prediction
 
@@ -19,13 +18,12 @@ df, cleaning_log_df = load_data()
 
 df_filtered = apply_filters(df)
 
-tab0, tab1, tab2, tab3, tab4, tab5 = st.tabs([
+tab0, tab1, tab2, tab3, tab4 = st.tabs([
     " Business Overview",              # tab0
     " Financial Analysis",             # tab1
     " Customer Analysis",              # tab2
     " Smart Business Recommendations", # tab3
     " Sales Forecasting",              # tab4
-    "Balance sheet"                    # tab5
 ])
 
 with tab0:
@@ -43,5 +41,3 @@ with tab3:
 with tab4:
     sales_prediction.render(df_filtered)
 
-with tab5:
-    balance_sheet.render(df_filtered)
