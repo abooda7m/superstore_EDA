@@ -4,7 +4,5 @@ numpy
 matplotlib
 seaborn
 scikit-learn
-scipy
-python-dotenv
-supabase
+python
 plotly
