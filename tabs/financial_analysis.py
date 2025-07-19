@@ -30,17 +30,6 @@ def render(df_filtered):
     profit_by_sub = df_filtered.groupby("Sub-Category")["Profit"].sum().sort_values()
     st.bar_chart(profit_by_sub)
 
-    st.markdown("---")
-    st.subheader("Profit Margin by Category")
-
-    # Calculate and display profit margin for each category
-    category_data = df_filtered.groupby("Category")[["Sales", "Profit"]].sum()
-    category_data["Profit Margin (%)"] = (category_data["Profit"] / category_data["Sales"]) * 100
-    st.dataframe(category_data.style.format({
-        "Sales": "${:,.2f}",
-        "Profit": "${:,.2f}",
-        "Profit Margin (%)": "{:.2f}%"
-    }))
 
     st.markdown("---")
     st.subheader("Top 10 Sub-Categories by Sales")
