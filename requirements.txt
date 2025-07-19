@@ -3,6 +3,5 @@ pandas
 numpy
 matplotlib
 seaborn
-python
 plotly
 prophet
