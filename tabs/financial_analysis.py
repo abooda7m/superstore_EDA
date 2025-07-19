@@ -75,7 +75,7 @@ def render(df_filtered):
             .sort_values()
             .head(5)
         )
-        st.info("These products have very low profit (less than 5 SAR):")
+        st.info("These products have very low profit (less than 5 USD):")
         st.table(top_low.reset_index().rename(columns={"Profit": "Total Profit"}).style.format({"Total Profit": "${:,.2f}"}))
     else:
         st.success("Great! All products are above the low-profit threshold")
