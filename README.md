@@ -51,8 +51,7 @@ full_project/
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/your-username/full_project.git
-cd full_project
+https://github.com/abooda7m/superstore_EDA.git
 ```
 
 ### 2. Create and activate a virtual environment (using `uv`)
