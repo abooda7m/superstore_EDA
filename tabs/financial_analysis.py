@@ -63,7 +63,7 @@ def render(df_filtered):
     st.plotly_chart(fig, use_container_width=True, key="region_category_heatmap")
 
     st.markdown("---")
-    st.subheader("Low-Profit Products (Below 5 SAR)")
+    st.subheader("Low-Profit Products (Below 5 USD)")
 
     # Identify products with total profit below threshold
     low_profit_products = df_filtered[df_filtered["Profit"] < 5]

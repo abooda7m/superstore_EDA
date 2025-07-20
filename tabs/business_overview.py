@@ -21,7 +21,7 @@ def render(df_filtered):
         {"title": "Total Sales", "value": f"${total_sales:,.2f}"},
         {"title": "Total Profit (Est.)", "value": f"${total_profit:,.2f}"},
         {"title": "Total Orders", "value": total_orders},
-        {"title": "Avg. Shipping Days", "value": f"{avg_shipping:.2f} days"},
+        {"title": "Avg. Shipping Days", "value": f"{int(avg_shipping)} days"},
         {"title": "Average Sale", "value": f"${avg_sale:,.2f}"},
         {"title": "Max Sale", "value": f"${max_sale:,.2f}"},
     ]
